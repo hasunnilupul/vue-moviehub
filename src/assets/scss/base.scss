@@ -1,0 +1,52 @@
+@import "https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$darkBlue:#032541;
+
+.scrollbar-y {
+  &::-webkit-scrollbar-track
+  {
+    @apply bg-white shadow-none;
+  }
+
+  &::-webkit-scrollbar
+  {
+    @apply w-2 bg-white;
+  }
+
+  &::-webkit-scrollbar-thumb
+  {
+    @apply rounded-full bg-gray-300 shadow-sm;
+  }
+}
+
+.scrollbar-x {
+  &::-webkit-scrollbar-track
+  {
+    @apply bg-white shadow-none;
+  }
+
+  &::-webkit-scrollbar
+  {
+    @apply h-2 bg-white;
+  }
+
+  &::-webkit-scrollbar-thumb
+  {
+    @apply rounded-full bg-gray-300 shadow-sm;
+  }
+}
+
+body{
+  font-family: 'Poppins', sans-serif;
+  @apply bg-white min-h-screen scrollbar-y;
+
+  #app{
+    main{
+      @apply pb-5;
+    }
+  }
+}
