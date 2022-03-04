@@ -1,8 +1,9 @@
 <script setup>
 import SelectionMenu from '../components/SelectionMenu.vue'
-import {onBeforeMount, reactive} from "vue"
+import {onBeforeMount, onMounted, reactive, watch} from "vue"
 import MovieCard from "./MovieCard.vue"
 import MovieCardsContainer from "./MovieCardsContainer.vue"
+import NProgress from "nprogress"
 
 const state = reactive({
   filters: [
@@ -11,6 +12,7 @@ const state = reactive({
   ],
   activeFilter: 0,
   popular: [],
+  loading: true,
 })
 
 const fetchType = (filter) => {
@@ -23,14 +25,31 @@ const fetchType = (filter) => {
 }
 
 const fetchPopular = async (filterType) => {
-  const {data} = await fetchType(state.filters[state.activeFilter]).catch(error => {
-    console.log(error.response)
-  })
-  state.popular = data.results
+  state.loading = true
+  await fetchType(filterType)
+      .then(({data}) => {
+        state.popular = data.results
+        setInterval(() => {
+          state.loading = false
+        }, 3000)
+      }).catch(error => {
+        console.log(error.response)
+        state.loading = false
+      })
 }
 
 onBeforeMount(() => {
   fetchPopular(state.filters[state.activeFilter])
+})
+
+onMounted(() => {
+  watch(() => state.loading, (val) => {
+    if (val) {
+      nprogress.start()
+    } else {
+      nprogress.done()
+    }
+  })
 })
 
 const setSelectedFilter = (index) => {
@@ -50,7 +69,7 @@ const setSelectedFilter = (index) => {
           <selection-menu :options="state.filters" :active="state.activeFilter" @clicked="setSelectedFilter"/>
         </div>
       </div>
-      <MovieCardsContainer>
+      <MovieCardsContainer :loading="state.loading">
         <MovieCard v-for="(item, index) in state.popular" :key="index" :movie="item"/>
       </MovieCardsContainer>
     </div>

@@ -53,7 +53,7 @@ const getPosterUrl = (poster_path) => {
     @apply relative flex flex-col items-start justify-start pt-7 pl-2;
 
     .movie-card-title {
-      @apply flex flex-wrap w-32 max-h-16 text-sm font-bold line-clamp-3 text-gray-800 hover:text-sky-600 focus:text-sky-600;
+      @apply flex flex-wrap w-32 max-h-16 text-sm font-bold line-clamp-2 text-gray-800 hover:text-sky-600 focus:text-sky-600;
     }
 
     .movie-card-created {

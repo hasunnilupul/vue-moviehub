@@ -1,25 +1,61 @@
 <script setup>
 import SelectionMenu from '../components/SelectionMenu.vue'
-import {reactive} from "vue"
+import {onBeforeMount, onMounted, reactive, watch} from "vue"
 import MovieCard from "./MovieCard.vue"
-import Item from "../model/Item"
 import MovieCardsContainer from "./MovieCardsContainer.vue"
+import NProgress from "nprogress";
 
 const state = reactive({
   filters: [
     'Today',
     'This Week'
   ],
-  activeFilter: 0
+  activeFilter: 0,
+  trending: [],
+  loading: true
+})
+
+const fetchType = (filter) => {
+  if (filter === 'Today') {
+    return axios.get('trending/all/day')
+  }
+  if (filter === 'This Week') {
+    return axios.get('trending/all/week')
+  }
+}
+
+const fetchTrending = async (filterType) => {
+  state.loading = true
+  await fetchType(filterType)
+      .then(({data}) => {
+        state.trending = data.results
+        state.loading = false
+      }).catch(error => {
+        console.log(error.response)
+        state.loading = false
+      })
+}
+
+onBeforeMount(() => {
+  fetchTrending(state.filters[state.activeFilter])
+})
+
+onMounted(() => {
+  watch(() => state.loading, (val) => {
+    if (val) {
+      nprogress.start()
+    } else {
+      nprogress.done()
+    }
+  })
 })
 
 const setSelectedFilter = (index) => {
   if (state.activeFilter !== index) {
     state.activeFilter = index
+    fetchTrending(state.filters[state.activeFilter])
   }
 }
-
-const movieItem = new Item(1, 'Peaky Fucking Blinders', 'A gangster family epic set in 1919 Birmingham, England and centered on a gang who sew razor blades in the peaks of their caps, and their fierce boss Tommy Shelby, who means to move up in the world.', 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/vUUqzWa2LnHIVqkaKVlVGkVcZIW.jpg', 'Drama, Crime', 85, 'Sep 12, 2013', 'Mar 02, 2021')
 </script>
 
 <template>
@@ -31,14 +67,8 @@ const movieItem = new Item(1, 'Peaky Fucking Blinders', 'A gangster family epic 
           <selection-menu :options="state.filters" :active="state.activeFilter" @clicked="setSelectedFilter"/>
         </div>
       </div>
-      <MovieCardsContainer>
-        <MovieCard :movie="movieItem"/>
-        <MovieCard :movie="movieItem"/>
-        <MovieCard :movie="movieItem"/>
-        <MovieCard :movie="movieItem"/>
-        <MovieCard :movie="movieItem"/>
-        <MovieCard :movie="movieItem"/>
-        <MovieCard :movie="movieItem"/>
+      <MovieCardsContainer :loading="state.loading">
+        <MovieCard v-for="(item, index) in state.trending" :key="index" :movie="item"/>
       </MovieCardsContainer>
     </div>
   </div>
