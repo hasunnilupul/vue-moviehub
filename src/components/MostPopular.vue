@@ -3,7 +3,6 @@ import SelectionMenu from '../components/SelectionMenu.vue'
 import {onBeforeMount, onMounted, reactive, watch} from "vue"
 import MovieCard from "./MovieCard.vue"
 import MovieCardsContainer from "./MovieCardsContainer.vue"
-import NProgress from "nprogress"
 
 const state = reactive({
   filters: [

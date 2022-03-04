@@ -6,28 +6,28 @@ import MovieCardsContainer from "./MovieCardsContainer.vue"
 
 const state = reactive({
   filters: [
-    'Today',
-    'This Week'
+    'On TV',
+    'In Theaters',
   ],
   activeFilter: 0,
-  trending: [],
+  trailers: [],
   loading: true
 })
 
 const fetchType = (filter) => {
-  if (filter === 'Today') {
-    return axios.get('trending/all/day')
+  if (filter === 'On TV') {
+    return axios.get('latest-trailers/all/day')
   }
-  if (filter === 'This Week') {
-    return axios.get('trending/all/week')
+  if (filter === 'In Theaters') {
+    return axios.get('latest-trailers/all/week')
   }
 }
 
-const fetchTrending = async (filterType) => {
+const fetchTrailers = async (filterType) => {
   state.loading = true
   await fetchType(filterType)
       .then(({data}) => {
-        state.trending = data.results
+        state.trailers = data.results
         state.loading = false
       }).catch(error => {
         console.log(error.response)
@@ -36,7 +36,7 @@ const fetchTrending = async (filterType) => {
 }
 
 onBeforeMount(() => {
-  fetchTrending(state.filters[state.activeFilter])
+  //fetchTrailers(state.filters[state.activeFilter])
 })
 
 onMounted(() => {
@@ -52,42 +52,43 @@ onMounted(() => {
 const setSelectedFilter = (index) => {
   if (state.activeFilter !== index) {
     state.activeFilter = index
-    fetchTrending(state.filters[state.activeFilter])
+    fetchTrailers(state.filters[state.activeFilter])
   }
 }
 </script>
 
 <template>
-  <div class="trending-container">
-    <div class="trending-content">
-      <div class="trending-header">
-        <h2 class="title">{{ 'Trending' }}</h2>
-        <div class="trending-filter">
+  <div class="latest-trailers-container">
+    <div class="latest-trailers-content">
+      <div class="latest-trailers-header">
+        <h2 class="title">{{ 'Latest Trailers' }}</h2>
+        <div class="latest-trailers-filter">
           <selection-menu :options="state.filters" :active="state.activeFilter" @clicked="setSelectedFilter"/>
         </div>
       </div>
       <MovieCardsContainer :loading="state.loading">
-        <MovieCard v-for="(item, index) in state.trending" :key="index" :movie="item"/>
+        <MovieCard v-for="(item, index) in state.trailers" :key="index" :movie="item"/>
       </MovieCardsContainer>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.trending-container {
-  @apply flex flex-row items-center justify-between pt-4 sm:pt-8 w-full h-fit;
+.latest-trailers-container {
+  @apply flex flex-row items-center justify-between pt-4 sm:pt-8 w-full h-fit bg-no-repeat bg-cover bg-top;
+  background-image: url('https://www.themoviedb.org/t/p/w220_and_h330_face/74xTEgt7R36Fpooo50r9T25onhq.jpg');
 
-  .trending-content {
+  .latest-trailers-content {
     @apply flex flex-col items-start justify-center w-full h-fit;
 
-    .trending-header {
+    .latest-trailers-header {
       @apply flex flex-row items-center justify-start px-6 sm:px-12 w-full;
 
       .title {
         @apply text-xl font-medium text-gray-800;
       }
 
-      .trending-filter {
+      .latest-trailers-filter {
         @apply flex flex-row ml-5;
       }
     }

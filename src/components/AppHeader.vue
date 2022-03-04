@@ -62,11 +62,11 @@ header {
     @apply shrink-0 flex flex-row justify-between items-center;
 
     .title {
-      @apply text-3xl font-bold text-teal-500;
+      @apply bg-clip-text text-transparent bg-gradient-to-r from-[#89cda4] to-[#3dbec8] text-3xl font-bold;
     }
 
     span {
-      @apply ml-1 w-16 h-5 rounded-full bg-gradient-to-r from-teal-500 to-blue-500;
+      @apply ml-1 w-16 h-5 rounded-full bg-gradient-to-r from-[#29bad2] to-[#08b4e1];
     }
   }
 
