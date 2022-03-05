@@ -17,7 +17,7 @@ const getPosterUrl = (poster_path) => {
 <template>
   <div class="movie-card-container">
     <router-link to="/" class="movie-card-image-container">
-      <v-lazy-image class="movie-card-image" :src="getPosterUrl(movie.poster_path)" alt="poster"/>
+      <v-lazy-image class="movie-card-image" :src="getPosterUrl(movie.poster_path)" src-placeholder="src/assets/img/default-placeholder.png" alt="poster"/>
     </router-link>
     <div class="movie-card-info-container">
       <router-link to="/" class="movie-card-title">{{ movie.title || movie.name }}</router-link>
