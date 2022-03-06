@@ -10,6 +10,7 @@ const state = reactive({
     'In Theaters'
   ],
   activeFilter: 0,
+  activeType: 'tv',
   popular: [],
   loading: true,
 })
@@ -54,6 +55,8 @@ onMounted(() => {
 const setSelectedFilter = (index) => {
   if (state.activeFilter !== index) {
     state.activeFilter = index
+    state.activeType = ((state.activeFilter===1) ? 'movie':'tv')
+    state.popular = []
     fetchPopular(state.filters[state.activeFilter])
   }
 }
@@ -69,7 +72,7 @@ const setSelectedFilter = (index) => {
         </div>
       </div>
       <MovieCardsContainer :loading="state.loading">
-        <MovieCard v-for="(item, index) in state.popular" :key="index" :movie="item"/>
+        <MovieCard v-for="(item, index) in state.popular" :key="index" :movie="item" :type="state.activeType"/>
       </MovieCardsContainer>
     </div>
   </div>

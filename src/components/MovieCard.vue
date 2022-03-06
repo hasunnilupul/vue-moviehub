@@ -6,7 +6,11 @@ defineProps({
   movie: {
     type: Object,
     required: true
-  }
+  },
+  type: {
+    type: String,
+    required: true
+  },
 })
 
 const getPosterUrl = (poster_path) => {
@@ -16,11 +20,12 @@ const getPosterUrl = (poster_path) => {
 
 <template>
   <div class="movie-card-container">
-    <router-link to="/" class="movie-card-image-container">
-      <v-lazy-image class="movie-card-image" :src="getPosterUrl(movie.poster_path)" src-placeholder="src/assets/img/default-placeholder.png" alt="poster"/>
+    <router-link :to="`/${type}/${movie.id}/${(movie.title || movie.name).toLowerCase().replaceAll(' ','-')}`" class="movie-card-image-container">
+      <v-lazy-image class="movie-card-image" :src="getPosterUrl(movie.poster_path)"
+                    src-placeholder="src/assets/img/default-placeholder.png" alt="poster"/>
     </router-link>
     <div class="movie-card-info-container">
-      <router-link to="/" class="movie-card-title">{{ movie.title || movie.name }}</router-link>
+      <router-link :to="`/${type}/${movie.id}/${(movie.title || movie.name).toLowerCase().replaceAll(' ','-')}`" class="movie-card-title">{{ movie.title || movie.name }}</router-link>
       <div class="movie-card-created">{{ movie.release_date || movie.first_air_date }}</div>
       <div class="movie-card-progress-container">
         <circular-progress :progress="movie.vote_average*10"/>

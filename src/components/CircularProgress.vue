@@ -41,7 +41,7 @@ watch(() => props.progress, (newValue) => {
 
 <template>
   <div
-      title="radial-progress"
+      :title="`rating: ${progress}%`"
       class="circular-progress"
       role="progressbar"
       aria-valuenow="25"

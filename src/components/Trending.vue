@@ -52,6 +52,7 @@ onMounted(() => {
 const setSelectedFilter = (index) => {
   if (state.activeFilter !== index) {
     state.activeFilter = index
+    state.trending = []
     fetchTrending(state.filters[state.activeFilter])
   }
 }
@@ -67,7 +68,7 @@ const setSelectedFilter = (index) => {
         </div>
       </div>
       <MovieCardsContainer :loading="state.loading">
-        <MovieCard v-for="(item, index) in state.trending" :key="index" :movie="item"/>
+        <MovieCard v-for="(item, index) in state.trending" :key="index" :movie="item" :type="item.media_type"/>
       </MovieCardsContainer>
     </div>
   </div>

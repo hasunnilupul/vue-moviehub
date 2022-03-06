@@ -1,6 +1,6 @@
 <script setup>
 import SelectionMenu from '../components/SelectionMenu.vue'
-import {onBeforeMount, onMounted, reactive, watch} from "vue"
+import {onBeforeMount, onMounted, reactive, ref, watch} from "vue"
 import TrailerCardsContainer from "./TrailerCardsContainer.vue"
 import TrailerCard from "./TrailerCard.vue"
 import TrailerQuickPreview from "./TrailerQuickView.vue"
@@ -11,11 +11,13 @@ const state = reactive({
     'In Theaters',
   ],
   activeFilter: 0,
+  activeType: 'tv',
   trailers: [],
   loading: true,
   viewPlayer: false,
   selectedTrailer: {},
 })
+const latestTrailersBackground = ref(null)
 
 const fetchType = (filter) => {
   if (filter === 'On TV') {
@@ -55,7 +57,15 @@ onMounted(() => {
 const setSelectedFilter = (index) => {
   if (state.activeFilter !== index) {
     state.activeFilter = index
+    state.activeType = ((state.activeFilter===1) ? 'movie':'tv')
+    state.trailers = []
     fetchTrailers(state.filters[state.activeFilter])
+  }
+}
+
+const setBackdrop = (url) => {
+  if(url) {
+    latestTrailersBackground.value.style.backgroundImage = `url(${url.replace('hqdefault', 'maxresdefault')})`
   }
 }
 
@@ -66,7 +76,7 @@ const playTrailer = (trailer) => {
 </script>
 
 <template>
-  <div class="latest-trailers-container">
+  <div class="latest-trailers-container" ref="latestTrailersBackground">
     <div class="latest-trailers-wrapper">
       <div class="latest-trailers-content">
         <div class="latest-trailers-header">
@@ -82,7 +92,7 @@ const playTrailer = (trailer) => {
           </div>
         </div>
         <TrailerCardsContainer :loading="state.loading">
-          <TrailerCard v-for="(item, index) in state.trailers" :key="index" :movie="item" @playTrailer="playTrailer"/>
+          <TrailerCard v-for="(item, index) in state.trailers" :key="index" :movie="item" :type="state.activeType" @onHover="setBackdrop" @playTrailer="playTrailer"/>
         </TrailerCardsContainer>
       </div>
     </div>
@@ -92,8 +102,12 @@ const playTrailer = (trailer) => {
 
 <style lang="scss" scoped>
 .latest-trailers-container {
-  @apply flex flex-row items-center justify-between w-full h-fit bg-no-repeat bg-cover bg-top;
-  background-image: url('https://image.tmdb.org/t/p/w1920_and_h427_multi_faces/r7zUXadc1saFFSWz8lbUx7q9bkG.jpg');
+  @apply flex flex-row items-center justify-between w-full h-fit;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  transition: all 0.5s;
 
   .latest-trailers-wrapper {
     @apply grow flex flex-col justify-center pt-4 sm:pt-8 w-full bg-[#032541] bg-opacity-75;

@@ -3,12 +3,16 @@ import VLazyImage from 'v-lazy-image'
 import {PlayIcon} from '@heroicons/vue/solid'
 import {onBeforeMount, reactive, watch} from "vue";
 
-defineEmits(['playTrailer'])
+defineEmits(['onHover', 'playTrailer'])
 const props = defineProps({
   movie: {
     type: Object,
     required: true
-  }
+  },
+  type: {
+    type: String,
+    required: true
+  },
 })
 
 const state = reactive({
@@ -17,7 +21,12 @@ const state = reactive({
 })
 
 const getPosterUrl = (poster_path) => {
-  return poster_path ? `${api_configuration.images.secure_base_url}w500${poster_path}` : ''
+  const movie_poster = poster_path ? `${api_configuration.images.secure_base_url}w500${poster_path}` : ''
+  const trailer_poster = state.trailer.poster
+  if (trailer_poster) {
+    return trailer_poster
+  }
+  return movie_poster
 }
 
 onBeforeMount(() => {
@@ -56,17 +65,19 @@ watch(() => state.trailer, (newVal) => {
 </script>
 
 <template>
-  <div class="trailer-card-container" v-cloak>
+  <div class="trailer-card-container" @mouseover="$emit('onHover', getPosterUrl(movie.poster_path))" v-cloak>
     <button class="group trailer-card-image-container" @click="$emit('playTrailer', state.trailer)">
       <v-lazy-image class="trailer-card-image group-hover:scale-105 ease-in-out duration-200 delay-100"
-                    src-placeholder="src/assets/img/default-placeholder.png" :src="state.trailer.poster || getPosterUrl(movie.poster_path)"
+                    src-placeholder="src/assets/img/default-placeholder.png" :src="getPosterUrl(movie.poster_path)"
                     alt="poster"/>
       <span class="trailer-card-play group-hover:scale-105 ease-in-out duration-200 delay-100">
         <play-icon class="icon group-hover:scale-105 ease-in-out duration-200 delay-100"/>
       </span>
     </button>
     <div class="trailer-card-info-container">
-      <router-link to="/" class="trailer-card-title">{{ movie.title || movie.name }}</router-link>
+      <router-link :to="`/${type}/${movie.id}`" class="trailer-card-title">
+        {{ movie.title || movie.name }}
+      </router-link>
       <div class="trailer-card-description">{{ state.trailer.name }}</div>
     </div>
   </div>
