@@ -1,16 +1,6 @@
 <script setup>
-import {ref} from 'vue'
-import {
-  Dialog,
-  DialogOverlay,
-  RadioGroup,
-  RadioGroupLabel,
-  RadioGroupOption,
-  TransitionChild,
-  TransitionRoot,
-} from '@headlessui/vue'
+import {Dialog, DialogOverlay, TransitionChild, TransitionRoot,} from '@headlessui/vue'
 import {XIcon} from '@heroicons/vue/outline'
-import {StarIcon} from '@heroicons/vue/solid'
 
 defineEmits(['close'])
 defineProps({
@@ -23,32 +13,6 @@ defineProps({
     required: true,
   },
 })
-const product = {
-  name: 'Basic Tee 6-Pack ',
-  price: '$192',
-  rating: 3.9,
-  reviewCount: 117,
-  href: '#',
-  imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-quick-preview-02-detail.jpg',
-  imageAlt: 'Two each of gray, white, and black shirts arranged on table.',
-  colors: [
-    {name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400'},
-    {name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400'},
-    {name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900'},
-  ],
-  sizes: [
-    {name: 'XXS', inStock: true},
-    {name: 'XS', inStock: true},
-    {name: 'S', inStock: true},
-    {name: 'M', inStock: true},
-    {name: 'L', inStock: true},
-    {name: 'XL', inStock: true},
-    {name: 'XXL', inStock: true},
-    {name: 'XXXL', inStock: false},
-  ],
-}
-const selectedColor = ref(product.colors[0])
-const selectedSize = ref(product.sizes[2])
 </script>
 
 <template>
@@ -57,7 +21,7 @@ const selectedSize = ref(product.sizes[2])
       <div class="flex min-h-screen text-center md:block md:px-2 lg:px-4" style="font-size: 0">
         <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100"
                          leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
-          <DialogOverlay class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity md:block"/>
+          <DialogOverlay class="hidden fixed inset-0 bg-black bg-opacity-80 transition-opacity md:block"/>
         </TransitionChild>
 
         <!-- This element is to trick the browser into centering the modal contents. -->
@@ -85,7 +49,8 @@ const selectedSize = ref(product.sizes[2])
                   </h2>
 
                   <section aria-labelledby="video-player">
-                    <iframe type="text/html" class="w-full h-[30vh] sm:h-[40vh] lg:h-[65vh]" :src="trailer.embeded_url" :title="trailer.name" style="background-color: #000" allowfullscreen>
+                    <iframe type="text/html" class="w-full h-[30vh] sm:h-[40vh] lg:h-[65vh]" :src="trailer.embeded_url"
+                            :title="trailer.name" style="background-color: #000" allowfullscreen>
                     </iframe>
                   </section>
                 </div>

@@ -3,7 +3,7 @@ import SelectionMenu from '../components/SelectionMenu.vue'
 import {onBeforeMount, onMounted, reactive, ref, watch} from "vue"
 import TrailerCardsContainer from "./TrailerCardsContainer.vue"
 import TrailerCard from "./TrailerCard.vue"
-import TrailerQuickPreview from "./TrailerQuickView.vue"
+import TrailerQuickView from "./TrailerQuickView.vue"
 
 const state = reactive({
   filters: [
@@ -65,7 +65,7 @@ const setSelectedFilter = (index) => {
 
 const setBackdrop = (url) => {
   if(url) {
-    latestTrailersBackground.value.style.backgroundImage = `url(${url.replace('hqdefault', 'maxresdefault')})`
+    latestTrailersBackground.value.style.backgroundImage = `url(${url})`
   }
 }
 
@@ -96,7 +96,7 @@ const playTrailer = (trailer) => {
         </TrailerCardsContainer>
       </div>
     </div>
-    <TrailerQuickPreview :trailer="state.selectedTrailer" :open="state.viewPlayer" @close="()=>state.viewPlayer=false" v-if="state.viewPlayer"/>
+    <TrailerQuickView :trailer="state.selectedTrailer" :open="state.viewPlayer" @close="()=>state.viewPlayer=false" v-if="state.viewPlayer"/>
   </div>
 </template>
 

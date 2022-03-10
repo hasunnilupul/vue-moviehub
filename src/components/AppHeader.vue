@@ -99,10 +99,10 @@ header {
 }
 
 .search-container {
-  @apply absolute top-16 flex flex-col items-stretch justify-start border-b border-gray-200 w-full h-fit bg-white;
+  @apply absolute top-16 z-30 flex flex-col items-stretch justify-start border-b border-gray-200 w-full h-fit bg-white;
 
   .search-input-container{
-    @apply flex flex-row items-center justify-between px-3 sm:px-8 py-2 sm:py-3;
+    @apply flex flex-row items-center justify-between px-3 sm:px-8 py-3;
 
     .icon{
       @apply h-5 w-5 fill-current text-gray-800;

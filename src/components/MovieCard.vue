@@ -1,5 +1,6 @@
 <script setup>
 import CircularProgress from "./CircularProgress.vue"
+import {getPosterUrl} from "../util/ImageUrlGenerator";
 import VLazyImage from 'v-lazy-image'
 
 defineProps({
@@ -12,10 +13,6 @@ defineProps({
     required: true
   },
 })
-
-const getPosterUrl = (poster_path) => {
-  return poster_path ? `${api_configuration.images.secure_base_url}w500${poster_path}` : ''
-}
 </script>
 
 <template>

@@ -7,6 +7,17 @@ const props = defineProps({
     default: 0,
     required: true
   },
+  holeSize: {
+    type: Number,
+    default: 62,
+    required: false,
+    description: "Lower the value bigger the track and Bigger the value lower the track."
+  },
+  customClass: {
+    type: String,
+    default: "text-xs font-bold text-white",
+    required: false
+  },
 })
 
 const state = reactive({
@@ -44,18 +55,17 @@ watch(() => props.progress, (newValue) => {
       :title="`rating: ${progress}%`"
       class="circular-progress"
       role="progressbar"
-      aria-valuenow="25"
+      aria-valuenow="0"
       aria-valuemin="0"
       aria-valuemax="100"
-      :style="{'--progress': progress+'%', '--track': state.trackColor,'--track-bg': state.trackBgColor}">
-    {{ `${progress}%` }}
+      :style="{'--holesize': holeSize+'%', '--progress': progress+'%', '--track': state.trackColor,'--track-bg': state.trackBgColor}">
+    <span class="progress-value" :class="customClass">{{ `${progress}%` }}</span>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .circular-progress {
-  @apply relative grid place-items-center w-full h-full text-xs font-bold text-white;
-  --holesize: 62%;
+  @apply relative grid place-items-center w-full h-full;
 
   &::before {
     @apply absolute inset-0 content-center rounded-full z-10;

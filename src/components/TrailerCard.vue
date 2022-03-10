@@ -29,6 +29,15 @@ const getPosterUrl = (poster_path) => {
   return movie_poster
 }
 
+const getBackdropUrl = (poster_path) => {
+  const movie_poster = poster_path ? `${api_configuration.images.secure_base_url}w1280${poster_path}` : ''
+  const trailer_poster = state.trailer.poster
+  if (trailer_poster) {
+    return trailer_poster
+  }
+  return movie_poster
+}
+
 onBeforeMount(() => {
   if (props.movie != null) {
     state.loading = true
@@ -36,7 +45,7 @@ onBeforeMount(() => {
         .then(({data}) => {
           if (data.results.length > 0) {
             data.results.every(item => {
-              if (item.type === 'Trailer') {
+              if (item.type === 'Trailer' && item.official) {
                 state.trailer = item
                 return false;
               }
@@ -57,7 +66,7 @@ watch(() => state.trailer, (newVal) => {
       case 'YouTube':
         state.trailer.url = `https://www.youtube.com/watch?v=${newVal.key}`
         state.trailer.embeded_url = `https://www.youtube.com/embed/${newVal.key}`
-        state.trailer.poster = `https://img.youtube.com/vi/${newVal.key}/hqdefault.jpg`
+        state.trailer.poster = `https://img.youtube.com/vi/${newVal.key}/maxresdefault.jpg`
         break;
     }
   }
@@ -65,7 +74,7 @@ watch(() => state.trailer, (newVal) => {
 </script>
 
 <template>
-  <div class="trailer-card-container" @mouseover="$emit('onHover', getPosterUrl(movie.poster_path))" v-cloak>
+  <div class="trailer-card-container" @mouseover="$emit('onHover', getBackdropUrl(movie.poster_path))" v-cloak>
     <button class="group trailer-card-image-container" @click="$emit('playTrailer', state.trailer)">
       <v-lazy-image class="trailer-card-image group-hover:scale-105 ease-in-out duration-200 delay-100"
                     src-placeholder="src/assets/img/default-placeholder.png" :src="getPosterUrl(movie.poster_path)"
